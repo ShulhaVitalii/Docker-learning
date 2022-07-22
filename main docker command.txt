@@ -1,0 +1,88 @@
+main docker commands:
+
+docker version    Getting a version of installed docker
+
+docker ps -a      Getting a list of running and stop containers
+
+docker ps         Show only running containers
+
+docker images     Getting the list of docker's images on your PC
+
+docker run image name:version     Creating and running containers. Version is optional. By default is :latest
+
+docker rm ID/Name      Using for remove docker container by ID or by Name
+
+docker run -i -t (or -it) busybox   '-it' it is needed for using a container (it is '-i' - interactive and '-t' - terminal)
+
+docker container prune   Using for removing all of the stopped containers
+
+
+docker run nginx   Creating a web serwer container
+docker run -d nginx  To run a container in background mode
+
+docker stop container_id/Name
+docker kill container_id/Name
+
+docker inspect ID/Name To show the details of the container like IP and other 
+docker inspect ID/Name | grep IP Address To show the part with IP address from details
+
+docker exec -it ID/Name Process_name(like bash) To run the additional process in the container
+hostname -i getting name of the process
+
+docker run -d --name name_for_container image_name  
+docker run -d --name my_nginx nginx   setting name for the container
+
+
+Мапінг портів(-p)
+For open container's port:
+docker run -p 8080:80 nginx  YYou can create a few containers with different ports to connect for both in one time (like 8080:80 and 8081:80)
+
+
+Маппінг томів (-v)
+Tom's mapping
+docker run -v C:\Users\Admin\Desktop\Docker\nginx:/usr/share/nginx/html -p 8081:80 -d nginx
+docker run -v ${PWD}:/usr/share/nginx/html -p 8080:80 -d nginx
+docker run -v ${PWD}:/usr/share/nginx/html nginx
+-v підключення тому
+${PWD} path to local folder (print working dirrectory)
+/usr/share/nginx/html  path to folder in container
+
+
+Автоматичне видалення контейнера після зупинки (--rm)
+docker run -it --rm busybox
+
+
+Розділення довгих команд на рядки (do not work on windows?)
+docker run --name \
+my-nginx \
+-v ${PWD}:/usr/share/enginx/html \
+-p 8888:80 \
+-d \
+--rm \
+nginx
+
+
+Докер файли
+Створення власних образів
+-nead Dockerfile
+-зазвичай Dockerfile в корні папки
+-Dockerfile має інструкції по створенню образу
+-При створенні можна вказати імя та тег для образу
+-на основі готового образу можна створювати контейнери
+
+Приклад Dockerfile 
+FROM python:alpine   (який базовий образ використовувати для вашого образу:тег образу(за замовчуванням лейтест))
+WORKDIR /app    (створ робоча директорія в середині образу туди будемо класти файли нашого додатку)
+COPY . .    (копіюємо всі файли з локальної робочої директорії в створену папку воркдір образа)
+CMD ["python", "main.py"]  (вказує яка команда буде виконана після створення контейнера на основі створеного образу)
+
+Для створення образу на основі Dockerfile. Якщо Dockerfile в поточній директорії:
+docker build .
+якщо назва не Dockerfile
+docker build -f Dockerfile.dev
+
+-t to add obraz name
+docker build . -t my-app:4.1.3
+
+
+
